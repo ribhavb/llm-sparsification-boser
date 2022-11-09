@@ -5,6 +5,7 @@ import numpy as np
 from transformers import RobertaConfig, RobertaModel
 from transformers import GPT2Tokenizer, GPT2Model
 from transformers import T5Tokenizer, T5Model
+from transformers import BartModel 
 
 def get_children(m): 
     child = [c for c in m.children()]
@@ -53,10 +54,8 @@ def full_model_prune(model, sparsity):
     for (layer,wt) in to_prune:
         print('in remove')
         print(list(layer.named_buffers()))
-        try:
-            prune.remove(layer, wt)
-        except Exception as e:
-            print(e)
+        prune.remove(layer, wt)
+
 
     
     return model
@@ -79,12 +78,12 @@ tokenizer.pad_token = tokenizer.eos_token
 tokenizer.save_pretrained(f"gpt2models/gpt2_tokenizer")
 
 for sparsity in sparsity_values:
-    model = T5Model.from_pretrained("t5-small")
+    model = BartModel.from_pretrained("facebook/bart-base")
     model = full_model_prune(model,sparsity)
-    model.save_pretrained(f"t5models/t5_{sparsity}")
+    model.save_pretrained(f"bartmodels/bart_{sparsity}")
 
-model = T5Model.from_pretrained("t5-small")
-model.save_pretrained(f"t5models/t5_small")
+model = T5Model.from_pretrained("facebook/bart-base")
+model.save_pretrained(f"bartmodels/bart")
 
 for sparsity in sparsity_values:
     print(sparsity)
