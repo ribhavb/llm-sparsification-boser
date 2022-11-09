@@ -15,13 +15,23 @@ MRPC -- or "Microsoft Research Paraphrase Corpus" is a paraphrasing task where t
 
 ![gpt2_layer](./src/images/layer_weights_gpt2.png)
 
+In the case of gpt2, we see that on the whole, the weights are evenly distributed mostly contained in the interval (-0.5,0.5), with most weights centered aroud 0 which is relatively expected. When looking at the layer by layer distributions, we see that while most layers follow similar behaviors, there are a few that in general have more weights of higher magnitude than others, in particular the layers that pop out the right side of the distribution such as layer 10. 
+
 ![bart_total](./src/images/bart_weights.png)
 
 ![bart_layer](./src/images/bart_layer.png)
 
+The BART distribution looks similar but is even more tightly packed around 0, this time with most weights contained in the interval (-0.25,0.25), and again bunched around 0 as expected. 
+
+And again there do not seem to be large difference in the magnitudes of weights in a given layer, regardless of whether they are encoder or decoder layers. We do see that decoder layer one is most to the right of all the layers, suggesting it has a higher concentration of larger magnitude weights, but the difference looks to be relatively small from the other layers. 
+
 ![roberta_total](./src/images/roberta_weights.png)
 
 ![roberta_layer](./src/images/roberta_layer.png)
+
+The roberta overall distribution is interesting, because we see small spikes in weights at around the -0.25 and .25 values, but outside of this it looks mostly like the BART distribution, just a bit more spread. 
+
+When looking at the layer by layer distribution there does look to be an outlier layer in (what I assume) is layer 1, but again for the most part everything seems tightly packed together. 
 
 ## Task Results 
 
@@ -46,4 +56,8 @@ As seen in these three graphs, in the case of most of the 0.1 sparsities, there 
 
 Once again we see very little differences in the train times for the models, again likely due to the same reasons as discussed above in the sst2 example. 
 
-## Challenges of Sparsification 
+## Challenges of Sparsification in LLMS 
+
+One immediate challenge that I saw was that in the pytorch implementation of the global unstructured prune, rather than getting rid of the weights in a way that they would be skipped during computation, in the current implementation the weights are just zeroed out, and the computation time benefit that we would hope to get out of sparsification is near non-existent, which is not ideal for at least parts of the problems that sparsification wants to solve. 
+
+One other thing that I wonder about with sparsification in LLMS is the way that sparsifying different parts of the transformer architecture changes the performance of the model. On initial research, it seems magnitude based methods might not always be the way to go in LLMs, and that structured pruning to induce sparse patterns, like pruning out consecutive parameters, might increase model performance, but figuring out the optimal way to prune a given LLM may not be immediately clear, and the novelty of the architecture may play an especially large role in the methods used for pruning. 
