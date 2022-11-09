@@ -12,4 +12,4 @@ MRPC -- or "Microsoft Research Paraphrase Corpus" is a paraphrasing task where t
 
 ## Task Results 
 
-![sst2_accuracy_results][./src/images/sst2_accuracy.png]
+![sst2_accuracy_results](./src/images/sst2_accuracy.png)
