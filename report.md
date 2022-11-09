@@ -9,6 +9,8 @@ MRPC -- or "Microsoft Research Paraphrase Corpus" is a paraphrasing task where t
 
 (Details on these tasks and others in the GLUE benchmark can be found here: https://docs.google.com/spreadsheets/d/1BrOdjJgky7FfeiwC_VDURZuRPUFUAz_jfczPPT35P00/edit#gid=0)
 
+As a note, I ended up skimping out on full blown 1B LLM's, as I only got my hands on the polaris machine very late, and my local machine could only handle moderately sized models. 
+
 
 ## Intial Parameter Analyses 
 ![gpt2_total](./src/images/gpt2_weights.png)
